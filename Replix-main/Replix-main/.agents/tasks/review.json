@@ -1,0 +1,9 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    "REPLIX brand text in docs/config — .env.example, AGENTS.md, and DEPLOY.md still contain REPLIX in prose and comments (e.g. 'REPLIX opens straight into the dashboard', 'Putting REPLIX on a server'). The user requirement was to remove it from all files. Update prose references to Replix.",
+    "GitHub repo URL leaking in /api/status — server.py returns 'links': {'repo': config.REPO_URL} to every signed-in user on every status poll. The star button is gone from the UI but the field is still sent. If REPLIX_REPO_URL is set, the private repo URL is exposed. Remove the field from the status response or confirm it should remain.",
+    "instagram icon key retained in icon map — index.html defines an 'instagram' SVG in the icon dictionary (line 843), used for the Instagram posting-integration card in Settings. This is a legitimate feature reference, not haziq's Instagram, but it should be confirmed as intentional given the requirement to remove all instagram references."
+  ],
+  "reviewDoc": "c:\\Users\\golur\\Downloads\\REPLIX-main\\.agents\\tasks\\review-doc.md"
+}

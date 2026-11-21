@@ -1,0 +1,13 @@
+# Replix — Render server requirements (Python 3.11)
+# No sherpa-onnx (desktop/GPU only), no soundfile dependency on C libs
+fastapi==0.115.6
+httpx==0.28.1
+numpy==2.2.6
+psycopg==3.3.9
+psycopg-binary==3.3.9
+python-multipart==0.0.20
+SQLAlchemy==2.0.36
+uvicorn==0.32.1
+yt-dlp==2024.11.18
+pillow==11.0.0
+soundfile==0.12.1

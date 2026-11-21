@@ -1,0 +1,67 @@
+{
+  "name": "replix",
+  "version": "1.0.3",
+  "description": "Replix — AI Clip Maker",
+  "main": "src/main.js",
+  "author": "Replix",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron . --dev",
+    "build:win": "electron-builder --win --x64",
+    "build:all": "electron-builder --win --mac --linux"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.replix.app",
+    "productName": "Replix",
+    "copyright": "Copyright © 2025 Replix",
+
+    "asar": true,
+    "asarUnpack": ["**/python-dist/**"],
+
+    "files": [
+      "src/**",
+      "assets/**",
+      "!**/.env",
+      "!**/.env.*",
+      "!**/secrets*",
+      "!**/__pycache__",
+      "!**/*.py",
+      "!**/*.pyc"
+    ],
+
+    "extraResources": [
+      {
+        "from": "../dist-python",
+        "to": "python-dist",
+        "filter": ["**/*"]
+      }
+    ],
+
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Replix"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://replix-w5v1.onrender.com/api/desktop/updates"
+    }
+  }
+}

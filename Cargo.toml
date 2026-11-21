@@ -1,0 +1,17 @@
+[package]
+name = "sasyndev_control"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "SasyndevCONTROL"
+path = "src/main.rs"
+
+[dependencies]
+tao = "0.37.3"
+wry = { version = "0.57.3", features = ["devtools"] }
+include_dir = "0.7.4"
+mime_guess = "2.0.5"
+
+[build-dependencies]
+winres = "0.1.12"

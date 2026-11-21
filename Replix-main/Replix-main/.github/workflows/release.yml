@@ -1,0 +1,148 @@
+name: Build and Release EXE
+
+# Trigger: push a tag like v1.0.0 or v1.2.3
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write   # needed to create releases and upload assets
+
+jobs:
+  build-windows:
+    name: Build Windows EXE
+    runs-on: windows-latest
+
+    steps:
+      # 1. Checkout source (private — only Actions can see this)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Set up Python (for PyInstaller)
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Install Python deps + PyInstaller
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      # 4. Set up Node.js (for Electron)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 5. Install Electron deps
+      - name: Install Electron dependencies
+        working-directory: electron
+        run: npm ci
+
+      # 6. Create studio/__main__.py if missing
+      - name: Ensure studio entry point
+        run: |
+          if (!(Test-Path "studio/__main__.py")) {
+            Set-Content "studio/__main__.py" "from studio.server import main`nmain()"
+          }
+        shell: pwsh
+
+      # 7. Build Python server with PyInstaller
+      - name: Build Python server
+        run: |
+          # Generate spec file dynamically
+          python -m PyInstaller `
+            --name replix-server `
+            --onedir `
+            --noconsole `
+            --icon electron/assets/icon.ico `
+            --add-data "web;web" `
+            --add-data "admin;admin" `
+            --add-data "studio/fonts;studio/fonts" `
+            --hidden-import studio.server `
+            --hidden-import studio.db `
+            --hidden-import studio.auth `
+            --hidden-import studio.config `
+            --hidden-import studio.jobs `
+            --hidden-import studio.live `
+            --hidden-import studio.render `
+            --hidden-import studio.media `
+            --hidden-import studio.ai `
+            --hidden-import studio.license `
+            --hidden-import studio.discord_log `
+            --hidden-import studio.health `
+            --hidden-import studio.secrets `
+            --hidden-import studio.email_otp `
+            --hidden-import studio.admin_otp `
+            --hidden-import sqlalchemy `
+            --hidden-import sqlalchemy.dialects.sqlite `
+            --hidden-import sqlalchemy.dialects.postgresql `
+            --hidden-import psycopg `
+            --hidden-import uvicorn `
+            --hidden-import fastapi `
+            --hidden-import anyio `
+            --hidden-import anyio._backends._asyncio `
+            --hidden-import PIL `
+            --hidden-import numpy `
+            --hidden-import httpx `
+            --distpath dist-python `
+            --workpath build/pyinstaller `
+            studio/__main__.py
+        env:
+          PYTHONPATH: .
+
+      # 8. Copy icon
+      - name: Copy icon
+        run: Copy-Item "replix.ico" "electron/assets/icon.ico" -Force
+        shell: pwsh
+
+      # 9. Build Electron EXE — NO source code attached
+      - name: Build Electron EXE
+        working-directory: electron
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: npm run build:win
+
+      # 10. Get version from tag
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      # 11. Create GitHub Release with ONLY the EXE — no source ZIP
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Replix ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          # ONLY attach the EXE and blockmap (for auto-updater)
+          # Source code ZIP is NOT attached — private repo keeps it safe
+          files: |
+            electron/dist/*.exe
+            electron/dist/*.blockmap
+            electron/dist/latest.yml
+          body: |
+            ## Replix ${{ github.ref_name }}
+
+            ### Download
+            ⬇️ **[Replix-Setup-${{ github.ref_name }}.exe](https://github.com/ManojKumar-ind001/Replix/releases/latest/download/Replix-Setup-${{ github.ref_name }}.exe)**
+
+            ### How to install
+            1. Download the `.exe` file above
+            2. Run it — Windows may show a SmartScreen warning, click "More info" → "Run anyway"
+            3. Sign in with your Replix account
+            4. Enter your Plan Key (get it on [Discord](https://discord.gg/2t8rXUdgQ4))
+
+            ### Support
+            📧 supportreplix@gmail.com
+            💬 [Discord](https://discord.gg/2t8rXUdgQ4)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

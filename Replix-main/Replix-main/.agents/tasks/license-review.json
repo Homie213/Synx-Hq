@@ -1,0 +1,41 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {
+      "id": 1,
+      "label": "Client-supplied HWID accepted at activation",
+      "confidence": "confirmed",
+      "summary": "/api/license/activate reads hwid from the request body and stores it directly. Any client can pass an arbitrary string, registering unlimited fake devices or spoofing another user's HWID.",
+      "action": "Remove hwid from the accepted body fields in the activate route. Determine the HWID server-side (or via a trusted client binary) rather than accepting it as an untrusted parameter."
+    },
+    {
+      "id": 2,
+      "label": "Server HWID used for license status — always mismatches in deployed environment",
+      "confidence": "confirmed",
+      "summary": "license_status_route and /api/status both call lic.get_hwid(), which fingerprints the server process's own machine. In any cloud/multi-user deployment, this will never match activations stored against user desktop HWIDs, returning active: False for all users.",
+      "action": "Decide the deployment model. If this is a web service, HWID binding must move to a client binary (Electron/desktop app) and the server must accept and attest the HWID from that binary. If it is a single-machine local app, document that constraint and remove the web UI activation path."
+    },
+    {
+      "id": 3,
+      "label": "Lock overlay is UI-only — no server enforcement",
+      "confidence": "confirmed",
+      "summary": "checkLicense() and .lock-overlay are client-side JavaScript only. No server middleware or route handler checks license.active before serving AI, rendering, or upload requests. Any authenticated user can call the API directly.",
+      "action": "Add a license check to the Gate middleware or to individual protected route handlers (upload, AI endpoints) that rejects requests when license_status returns active: False."
+    },
+    {
+      "id": 4,
+      "label": "admin_revoke_device has no ownership check on act_id",
+      "confidence": "likely",
+      "summary": "POST /api/admin/keys/{key}/devices/{act_id}/revoke passes act_id directly to admin_revoke_device(act_id), which updates any activation record matching that integer ID regardless of which key it belongs to.",
+      "action": "In admin_revoke_device, add a WHERE key = key condition alongside WHERE id = act_id so the update is scoped to the correct key."
+    },
+    {
+      "id": 5,
+      "label": "license_status write-amplification on every status poll",
+      "confidence": "confirmed",
+      "summary": "Every 15-second /api/status poll per authenticated user triggers a JOIN query plus an UPDATE last_seen write. At scale this produces significant unnecessary write load.",
+      "action": "Cache the license status result in memory (keyed by user_id) with a 60-second TTL, or update last_seen only when more than N minutes have passed since the previous update."
+    }
+  ],
+  "reviewDoc": "c:/Users/golur/Downloads/REPLIX-main/.agents/tasks/license-review-doc.md"
+}

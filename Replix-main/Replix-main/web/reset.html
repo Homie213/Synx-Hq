@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reset your Replix password</title>
+<meta name="description" content="Reset the password for your Replix account.">
+<link rel="icon" href="/brand/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#E8273A;--brand-hi:#F03550;--ink:#2A0810;--soft:#FFF0F2;--line-b:#FFBCC3;--deep:#9A1225;
+  --frame:#1E1612;--frame-2:#2C221D;--frame-text:#F4EEEA;--frame-dim:#A99A91;
+  --muted:#F7F4F1;--line:#EEE8E4;--line-2:#E1D9D3;--text:#211813;--dim:#6D6159;--faint:#A0948C;--bad:#D3343F;--bad-soft:#FDECEE;
+  --r-lg:16px;--r:12px;--r-sm:8px;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--text);font:16px/1.55 "Geist","Segoe UI",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+svg{width:18px;height:18px;flex:none;fill:currentColor}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:var(--r);border:1px solid var(--line-2);background:#fff;color:var(--text);
+  font:inherit;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+.btn:hover{background:var(--muted);border-color:#D4CAC3}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--ink)}
+.btn.primary:hover{background:var(--brand-hi);border-color:var(--brand-hi)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}.btn.dark:hover{background:#3A2C25;border-color:#3A2C25}
+.btn.sm{height:38px;padding:0 14px;font-size:14px}
+.btn.lg{height:52px;padding:0 26px;font-size:16px}
+.btn:disabled{opacity:.5;cursor:default}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+body{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:var(--frame)}
+.side{color:var(--frame-text);padding:40px 48px;display:flex;flex-direction:column;justify-content:space-between;min-height:100vh}
+.side img{height:38px}
+.side h1{font-size:clamp(30px,3.2vw,42px);line-height:1.1;letter-spacing:-.03em;font-weight:700;color:#fff;max-width:440px}
+.side h1 em{font-style:normal;color:var(--brand)}
+.side ul{list-style:none;padding:0;margin:28px 0 0;display:flex;flex-direction:column;gap:14px;color:var(--frame-dim);font-size:16px}
+.side li{display:flex;gap:12px;align-items:flex-start}.side li svg{color:var(--brand);margin-top:3px}
+.side small{color:var(--frame-dim);font-size:13px}
+.main{background:#fff;margin:8px 8px 8px 0;border-radius:var(--r-lg);display:grid;place-items:center;padding:32px 20px}
+.card{width:100%;max-width:400px}
+.card h2{font-size:28px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.card>p{color:var(--dim);margin:8px 0 26px}
+form{display:flex;flex-direction:column;gap:16px}
+label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:var(--dim)}
+input{height:46px;padding:0 14px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:#fff;font:inherit;color:var(--text);outline:none;transition:border-color .15s ease,background-color .15s ease}
+input:hover{border-color:#D4CAC3}input:focus{border-color:var(--brand);background:#fff}
+input:focus-visible{outline:none}
+input::placeholder{color:var(--faint)}
+.btn{width:100%;height:48px}
+.or{display:flex;align-items:center;gap:14px;color:var(--faint);font-size:13px;margin:20px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.err{display:none;background:var(--bad-soft);color:var(--bad);padding:11px 14px;border-radius:var(--r);font-size:14px;font-weight:500}
+.err.on{display:block}
+.swap{margin-top:22px;text-align:center;color:var(--dim);font-size:15px}
+.swap a{color:var(--deep);font-weight:600;text-decoration:none}.swap a:hover{text-decoration:underline}
+.hint{font-size:13px;color:var(--faint);font-weight:400}
+.pwrow{display:flex;justify-content:space-between;align-items:baseline}
+.pwrow a{font-size:13px;font-weight:600;color:var(--deep);text-decoration:none}.pwrow a:hover{text-decoration:underline}
+.legal{margin-top:14px;font-size:12px;color:var(--faint);text-align:center;line-height:1.5}
+.legal a{color:var(--dim)}
+.g{width:20px;height:20px}
+.mobile-logo{display:none}
+.pwbox{position:relative;display:flex;align-items:center}
+.pwbox input{flex:1;padding-right:46px}
+.pwtoggle{position:absolute;right:0;top:0;bottom:0;width:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;color:var(--faint);transition:color .15s ease}
+.pwtoggle:hover{color:var(--dim)}
+@media (max-width:860px){body{grid-template-columns:1fr;background:#fff}.side{display:none}.main{margin:0;border-radius:0;min-height:100vh;align-content:center}.mobile-logo{display:block;height:34px;margin-bottom:28px}}
+</style>
+</head>
+<body>
+<aside class="side">
+  <a href="/" aria-label="Replix home" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+    <img src="/brand/favicon.ico" alt="" style="width:30px;height:30px;border-radius:8px;flex:none">
+    <span style="font-size:19px;font-weight:700;letter-spacing:-.03em;color:#F5EAEC">Replix</span>
+  </a>
+  <div>
+    <h1>Clips from every stream, <em>without watching all of it.</em></h1>
+    <ul>
+      <li><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>Records live streams and clips them as they happen</span></li>
+      <li><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>Vertical shorts with word-by-word captions and a hook</span></li>
+      <li><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>Free and open source: runs on your own AI key</span></li>
+    </ul>
+  </div>
+  <small>© <span id="year"></span> Replix · <a href="/privacy" style="color:inherit">Privacy</a> · <a href="/terms" style="color:inherit">Terms</a></small>
+</aside>
+<main class="main"><div class="card">
+  <a href="/"><img class="mobile-logo" src="/brand/favicon.ico" alt="Replix" style="width:40px;height:40px;border-radius:10px"></a>
+  <h2 id="h">Reset your password</h2><p id="p">Enter your email address and we'll send a verification code to reset your password.</p>
+  <form id="ask" novalidate>
+    <div class="err" id="err" role="alert"></div>
+    <label>Email<input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+    <button class="btn primary" id="go1">Send verification code</button>
+  </form>
+  
+  <form id="otpForm" novalidate hidden>
+    <div class="err" id="errOtp" role="alert"></div>
+    <div class="okbox" style="margin-bottom:18px">
+      <div style="font-weight:700;font-size:15px;color:#2A0810;margin-bottom:4px">Code sent to your email</div>
+      <div style="font-size:13px;color:#5A4A40">We sent a verification code to <b id="targetEmail"></b>. Check your inbox or spam folder.</div>
+    </div>
+    <label>Verification Code
+      <input id="otpInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="Enter code" autocomplete="one-time-code" style="font-size:22px;letter-spacing:5px;text-align:center;font-weight:700" required>
+    </label>
+    <button class="btn primary" id="goOtp">Verify code</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:13px">
+      <span id="countdown" style="color:#9A7E82">Resend in: <b>01:00</b></span>
+      <button type="button" id="resendBtn" style="background:none;border:none;color:#E8273A;font-weight:600;cursor:pointer;padding:0" disabled>Resend code</button>
+    </div>
+  </form>
+
+  <form id="set" novalidate hidden>
+    <div class="err" id="err2" role="alert"></div>
+    <label>New password
+      <span class="pwbox">
+        <input id="pw" type="password" autocomplete="new-password" required minlength="8">
+        <button type="button" class="pwtoggle" id="pwtog1" aria-label="Show password" aria-pressed="false">
+          <svg id="pweye1" viewBox="0 0 256 256" width="18" height="18" fill="currentColor"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></svg>
+        </button>
+      </span>
+      <span class="hint">At least 8 characters.</span>
+    </label>
+    <label>Type it again
+      <span class="pwbox">
+        <input id="pw2" type="password" autocomplete="new-password" required minlength="8">
+        <button type="button" class="pwtoggle" id="pwtog2" aria-label="Show password" aria-pressed="false">
+          <svg id="pweye2" viewBox="0 0 256 256" width="18" height="18" fill="currentColor"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></svg>
+        </button>
+      </span>
+    </label>
+    <button class="btn primary" id="go2">Save new password</button>
+  </form>
+  <p class="swap"><a href="/login">Back to sign in</a></p>
+</div></main>
+<style>.okbox{background:#FFF0F2;border:1px solid #FFBCC3;padding:16px;border-radius:var(--r);}</style>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+const q = new URLSearchParams(location.search);
+let resetToken = q.get("t");
+let userEmail = "";
+let timerInterval = null;
+const $ = id => document.getElementById(id);
+const fail = (box, m) => { $(box).textContent = m; $(box).classList.add("on"); };
+
+if (resetToken) {
+  $("ask").hidden = true; $("otpForm").hidden = true; $("set").hidden = false;
+  $("h").textContent = "Choose a new password"; $("p").textContent = "You'll be signed in, and signed out everywhere else.";
+}
+
+// Pre-fill email if passed in query string (e.g. from email link)
+const emailParam = q.get("email");
+if (emailParam && $("email")) {
+  $("email").value = emailParam;
+  userEmail = emailParam;
+}
+
+// Handle error redirect from Supabase or expired links gracefully
+if (location.hash && location.hash.includes("error")) {
+  const hp = new URLSearchParams(location.hash.replace(/^#/, ""));
+  const errDesc = hp.get("error_description") || "The previous verification link has expired or is invalid.";
+  fail("err", errDesc + " Enter your email below to get a fresh verification code.");
+}
+
+function startTimer(duration) {
+  clearInterval(timerInterval);
+  let timer = duration;
+  $("resendBtn").disabled = true;
+  $("resendBtn").style.opacity = "0.5";
+  timerInterval = setInterval(() => {
+    let minutes = parseInt(timer / 60, 10);
+    let seconds = parseInt(timer % 60, 10);
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    $("countdown").innerHTML = `Resend in: <b>${minutes}:${seconds}</b>`;
+    if (--timer < 0) {
+      clearInterval(timerInterval);
+      $("countdown").innerHTML = `<span style="color:#5A4A40">Didn't get code?</span>`;
+      $("resendBtn").disabled = false;
+      $("resendBtn").style.opacity = "1";
+    }
+  }, 1000);
+}
+
+$("ask").addEventListener("submit", async e => {
+  e.preventDefault(); $("err").classList.remove("on");
+  userEmail = $("email").value.trim(); if (!userEmail) return fail("err", "Enter your email.");
+  $("go1").disabled = true;
+  try {
+    const r = await fetch("/api/auth/forgot", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:userEmail})});
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Something went wrong. Try again.");
+    $("targetEmail").textContent = userEmail;
+    $("ask").hidden = true;
+    $("otpForm").hidden = false;
+    $("h").textContent = "Enter verification code";
+    $("p").textContent = "Check your email inbox or spam folder for the verification code.";
+    startTimer(60);
+    setTimeout(() => $("otpInput").focus(), 100);
+  } catch (err) { fail("err", err.message); $("go1").disabled = false; }
+});
+
+$("resendBtn").addEventListener("click", async () => {
+  $("errOtp").classList.remove("on");
+  try {
+    const r = await fetch("/api/auth/forgot", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:userEmail})});
+    if (!r.ok) {
+      const d = await r.json().catch(() => ({}));
+      throw new Error(d.detail || "Could not resend code.");
+    }
+    startTimer(60);
+    $("otpInput").value = "";
+    $("otpInput").focus();
+  } catch (err) { fail("errOtp", err.message); }
+});
+
+$("otpForm").addEventListener("submit", async e => {
+  e.preventDefault(); $("errOtp").classList.remove("on");
+  const otp = $("otpInput").value.trim();
+  if (!otp || !/^\d{6,8}$/.test(otp)) return fail("errOtp", "Enter the verification code from your email.");
+  $("goOtp").disabled = true;
+  try {
+    const r = await fetch("/api/auth/verify-reset-otp", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:userEmail, otp})
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Invalid or expired code.");
+    resetToken = d.token;
+    clearInterval(timerInterval);
+    $("otpForm").hidden = true;
+    $("set").hidden = false;
+    $("h").textContent = "Choose a new password";
+    $("p").textContent = "Enter your new password below.";
+    setTimeout(() => $("pw").focus(), 100);
+  } catch (err) { fail("errOtp", err.message); $("goOtp").disabled = false; }
+});
+
+$("set").addEventListener("submit", async e => {
+  e.preventDefault(); $("err2").classList.remove("on");
+  const a = $("pw").value, b = $("pw2").value;
+  if (a.length < 8) return fail("err2", "Use at least 8 characters.");
+  if (a !== b) return fail("err2", "The two passwords don't match.");
+  $("go2").disabled = true;
+  try {
+    const r = await fetch("/api/auth/reset", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({token:resetToken, password:a})
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "Something went wrong. Try again.");
+    location.href = "/app";
+  } catch (err) { fail("err2", err.message); $("go2").disabled = false; }
+});
+
+// Eye icon SVGs
+const EYE_OPEN = `<path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/>`;
+const EYE_OFF  = `<path d="M228,175a8,8,0,0,1-11,2.21l-33.06-23.56A111.07,111.07,0,0,1,140,170.6V208a8,8,0,0,1-16,0V170.6a110.24,110.24,0,0,1-27.94-10L67,184.19A8,8,0,0,1,56,172l26.44-18.84C66.53,140,54,122.77,46.39,104A8,8,0,0,1,61.6,97.6C72.68,124.19,99.36,144,128,144s55.32-19.81,66.4-46.4A8,8,0,0,1,209.61,104c-7.59,18.77-20.1,36-36,49.14L202,175.73A8,8,0,0,1,228,175Z"/>`;
+
+function makePwToggle(btnId, inputId, svgId) {
+  const btn = $(btnId), inp = $(inputId), svg = $(svgId);
+  btn.addEventListener("click", () => {
+    const show = inp.type === "password";
+    inp.type = show ? "text" : "password";
+    btn.setAttribute("aria-pressed", show);
+    btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    svg.innerHTML = show ? EYE_OFF : EYE_OPEN;
+  });
+}
+makePwToggle("pwtog1", "pw",  "pweye1");
+makePwToggle("pwtog2", "pw2", "pweye2");
+</script>
+</body>
+</html>

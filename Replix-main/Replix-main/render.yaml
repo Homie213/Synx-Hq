@@ -1,0 +1,48 @@
+services:
+  - type: web
+    name: replix-server
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements-server.txt
+    startCommand: python -m studio.server --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        sync: false   # set in Render dashboard
+      - key: REPLIX_ACCOUNTS
+        value: "1"
+      - key: REPLIX_PUBLIC_URL
+        sync: false   # set in Render dashboard (your render URL)
+      - key: REPLIX_LEGAL_NAME
+        value: Replix
+      - key: REPLIX_CONTACT_EMAIL
+        value: supportreplix@gmail.com
+      - key: REPLIX_MAIL_FROM
+        value: "Replix <supportreplix@gmail.com>"
+      - key: REPLIX_SMTP_HOST
+        value: smtp.gmail.com
+      - key: REPLIX_SMTP_PORT
+        value: "587"
+      - key: REPLIX_SMTP_USER
+        value: supportreplix@gmail.com
+      - key: REPLIX_SMTP_PASSWORD
+        sync: false   # set in Render dashboard (Gmail app password)
+      - key: REPLIX_SUPABASE_URL
+        sync: false
+      - key: REPLIX_SUPABASE_SERVICE_KEY
+        sync: false
+      - key: REPLIX_DISCORD_SERVER_LOGS
+        sync: false
+      - key: REPLIX_DISCORD_ERROR_LOGS
+        sync: false
+      - key: REPLIX_DISCORD_OTHER_LOGS
+        sync: false
+      - key: REPLIX_GITHUB_REPO
+        value: ManojKumar-ind001/Replix
+      - key: REPLIX_GITHUB_PAT
+        sync: false
+      - key: REPLIX_ADMIN_PATH
+        sync: false   # keep secret
+      - key: REPLIX_KEEPALIVE_URL
+        sync: false
